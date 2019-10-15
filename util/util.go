@@ -1,21 +1,15 @@
 package util
 
 import (
-	"gwx/constant"
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
-func GetForJson(params map[string]interface{}) (string, error) {
-	res, err := get(params, constant.Token)
-	if err != nil {
-
-	}
-	return res, nil
-}
-
-func get(params map[string]interface{}, url string) (string, error) {
+func Get(params map[string]interface{}, url string) (string, error) {
 	client := &http.Client{}
 	args := ""
 	for key, value := range params {
@@ -39,4 +33,51 @@ func get(params map[string]interface{}, url string) (string, error) {
 	}
 
 	return string(body), nil
+}
+
+func ConvertStr(data interface{}) string {
+	if data == nil {
+		return ""
+	}
+	switch value := data.(type) {
+	case int:
+		return strconv.Itoa(value)
+	case int8:
+		return strconv.Itoa(int(value))
+	case int16:
+		return strconv.Itoa(int(value))
+	case int32:
+		return strconv.Itoa(int(value))
+	case int64:
+		return strconv.FormatInt(value, 10)
+	case uint:
+		return strconv.FormatUint(uint64(value), 10)
+	case uint8:
+		return strconv.FormatUint(uint64(value), 10)
+	case uint16:
+		return strconv.FormatUint(uint64(value), 10)
+	case uint32:
+		return strconv.FormatUint(uint64(value), 10)
+	case uint64:
+		return strconv.FormatUint(value, 10)
+	case float32:
+		return strconv.FormatFloat(float64(value), 'f', -1, 32)
+	case float64:
+		return strconv.FormatFloat(value, 'f', -1, 64)
+	case bool:
+		return strconv.FormatBool(value)
+	case string:
+		return value
+	case []byte:
+		return string(value)
+	case []rune:
+		return string(value)
+	default:
+		// Finally we use json.Marshal to convert.
+		if jsonContent, err := json.Marshal(value); err != nil {
+			return fmt.Sprint(value)
+		} else {
+			return string(jsonContent)
+		}
+	}
 }
