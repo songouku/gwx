@@ -1,11 +1,11 @@
 package util
 
 import (
-	"encoding/json"
-	"fmt"
+	"github.com/gogf/gf/encoding/gjson"
+	"github.com/gogf/gf/encoding/gxml"
+	"github.com/gogf/gf/os/glog"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 	"strings"
 )
 
@@ -35,49 +35,27 @@ func Get(params map[string]interface{}, url string) (string, error) {
 	return string(body), nil
 }
 
-func ConvertStr(data interface{}) string {
-	if data == nil {
-		return ""
+//xml数据转为实体
+// result 为指针类型
+func ConvertXmlToStruct(data []byte, result interface{}) {
+	json, err := gxml.ToJson(data)
+	if err != nil {
+		glog.Errorf("convert to json failed , error is %v", err)
+		return
 	}
-	switch value := data.(type) {
-	case int:
-		return strconv.Itoa(value)
-	case int8:
-		return strconv.Itoa(int(value))
-	case int16:
-		return strconv.Itoa(int(value))
-	case int32:
-		return strconv.Itoa(int(value))
-	case int64:
-		return strconv.FormatInt(value, 10)
-	case uint:
-		return strconv.FormatUint(uint64(value), 10)
-	case uint8:
-		return strconv.FormatUint(uint64(value), 10)
-	case uint16:
-		return strconv.FormatUint(uint64(value), 10)
-	case uint32:
-		return strconv.FormatUint(uint64(value), 10)
-	case uint64:
-		return strconv.FormatUint(value, 10)
-	case float32:
-		return strconv.FormatFloat(float64(value), 'f', -1, 32)
-	case float64:
-		return strconv.FormatFloat(value, 'f', -1, 64)
-	case bool:
-		return strconv.FormatBool(value)
-	case string:
-		return value
-	case []byte:
-		return string(value)
-	case []rune:
-		return string(value)
-	default:
-		// Finally we use json.Marshal to convert.
-		if jsonContent, err := json.Marshal(value); err != nil {
-			return fmt.Sprint(value)
-		} else {
-			return string(jsonContent)
-		}
+	tmp, err := gjson.DecodeToJson(json)
+	if err != nil {
+		glog.Errorf("convert to struct failed , error is %v", err)
+		return
+	}
+	encode, err := gjson.Encode(tmp.GetJson("xml"))
+	if err != nil {
+		glog.Errorf("encode failed , error is %v", err)
+		return
+	}
+	err = gjson.DecodeTo(encode, result)
+	if err != nil {
+		glog.Errorf("convert to struct failed , error is %v", err)
+		return
 	}
 }

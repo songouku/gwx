@@ -3,6 +3,9 @@ package test
 import (
 	"encoding/xml"
 	"fmt"
+	"github.com/gogf/gf/os/gfile"
+	"github.com/gogf/gf/os/glog"
+	"github.com/gogf/gf/util/gconv"
 	"gwx/client"
 	"gwx/util"
 	"io/ioutil"
@@ -10,7 +13,7 @@ import (
 )
 
 var wx = client.Client{
-	AppId:  "wxc5a30a91fda3c2d",
+	AppId:  "wxc5a30a91fda3c2de",
 	Secret: "79fff5da1f931bccd6814578cc413fee",
 }
 
@@ -20,7 +23,7 @@ func TestToken(t *testing.T) {
 		fmt.Errorf("error is %v", err)
 		return
 	}
-	fmt.Printf("res is %s", util.ConvertStr(token))
+	fmt.Printf("res is %s", gconv.String(token))
 }
 
 type DataModel struct {
@@ -58,5 +61,26 @@ func TestXmlParse(t *testing.T) {
 		t.Errorf("error is %v", err)
 		return
 	}
-	fmt.Printf("result is %s", util.ConvertStr(result))
+	fmt.Printf("result is %s", gconv.String(result))
+}
+
+func TestXml(t *testing.T) {
+	content := gfile.GetBytes("../test.xml")
+	var result Content
+	util.ConvertXmlToStruct(content, &result)
+	glog.Infof("json is %v", result)
+
+}
+
+type Model struct {
+	Xml Content
+}
+
+type Content struct {
+	ToUserName   string
+	FromUserName string
+	CreateTime   string
+	MsgType      string
+	Content      string
+	MsgId        string
 }
