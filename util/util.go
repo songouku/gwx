@@ -1,6 +1,7 @@
 package util
 
 import (
+	"encoding/xml"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -54,25 +55,10 @@ func Post(requestUrl string, data map[string]interface{}) (string, error) {
 
 //xml数据转为实体
 // result 为指针类型
-func ConvertXmlToStruct(data []byte, result interface{}) {
-	json, err := gxml.ToJson(data)
+func ConvertXmlToStruct(data []byte, result interface{}) error {
+	err := xml.Unmarshal(data, result)
 	if err != nil {
-		glog.Errorf("convert to json failed , error is %v", err)
-		return
+		return err
 	}
-	tmp, err := gjson.DecodeToJson(json)
-	if err != nil {
-		glog.Errorf("convert to struct failed , error is %v", err)
-		return
-	}
-	encode, err := gjson.Encode(tmp.GetJson("xml"))
-	if err != nil {
-		glog.Errorf("encode failed , error is %v", err)
-		return
-	}
-	err = gjson.DecodeTo(encode, result)
-	if err != nil {
-		glog.Errorf("convert to struct failed , error is %v", err)
-		return
-	}
+	return nil
 }

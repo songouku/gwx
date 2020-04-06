@@ -9,7 +9,7 @@ import (
 	"gwx/util"
 )
 
-func (c *Client) GetToken() (*model.Token, error) {
+func (c *client) GetToken() (*model.Token, error) {
 	params := map[string]interface{}{
 		"grant_type": "client_credential",
 		"appid":      c.AppId,

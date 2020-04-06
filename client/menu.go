@@ -8,7 +8,7 @@ import (
 	"gwx/util"
 )
 
-func (c *Client) CreateMenu(param []model.MenuItem) error {
+func (c *client) CreateMenu(param []model.MenuItem) error {
 	args := map[string]interface{}{
 		"button": param,
 	}
@@ -27,6 +27,6 @@ func (c *Client) CreateMenu(param []model.MenuItem) error {
 	return nil
 }
 
-func (c *Client) QueryMenu() {
+func (c *client) QueryMenu() {
 
 }
