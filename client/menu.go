@@ -3,12 +3,12 @@ package client
 import (
 	"encoding/json"
 	"errors"
-	"gwx/constant"
-	"gwx/model"
-	"gwx/util"
+	"github.com/songouku/gwx/constant"
+	"github.com/songouku/gwx/model"
+	"github.com/songouku/gwx/util"
 )
 
-func (c *client) CreateMenu(param []model.MenuItem) error {
+func (c *WxConfig) CreateMenu(param []model.MenuItem) error {
 	args := map[string]interface{}{
 		"button": param,
 	}
@@ -27,6 +27,6 @@ func (c *client) CreateMenu(param []model.MenuItem) error {
 	return nil
 }
 
-func (c *client) QueryMenu() {
+func (c *WxConfig) QueryMenu() {
 
 }

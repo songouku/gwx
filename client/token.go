@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gwx/constant"
-	"gwx/model"
-	"gwx/util"
+	"github.com/songouku/gwx/constant"
+	"github.com/songouku/gwx/model"
+	"github.com/songouku/gwx/util"
 )
 
-func (c *client) GetToken() (*model.Token, error) {
+func (c *WxConfig) GetToken() (*model.Token, error) {
 	params := map[string]interface{}{
 		"grant_type": "client_credential",
 		"appid":      c.AppId,
