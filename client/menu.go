@@ -1,23 +1,25 @@
 package client
 
 import (
+	"encoding/json"
 	"errors"
-	"github.com/gogf/gf/encoding/gjson"
-	"github.com/gogf/gf/frame/g"
-	"github.com/gogf/gf/net/ghttp"
-	"github.com/gogf/gf/os/glog"
 	"gwx/constant"
 	"gwx/model"
+	"gwx/util"
 )
 
 func (c *Client) CreateMenu(param []model.MenuItem) error {
-	args := g.Map{"button": param}
-	content := ghttp.PostContent(constant.CreateMenu, args)
-	var result model.Response
-	err := gjson.DecodeTo(content, &result)
+	args := map[string]interface{}{
+		"button": param,
+	}
+	content, err := util.Post(constant.CreateMenu, args)
 	if err != nil {
-		glog.Errorf("create menu failed , error is %v", err)
-		return err
+		return errors.New("create menu failed")
+	}
+	var result model.Response
+	err = json.Unmarshal([]byte(content), &result)
+	if err != nil {
+		return errors.New("create menu failed")
 	}
 	if result.ErrCode != 0 {
 		return errors.New(result.ErrMsg)
