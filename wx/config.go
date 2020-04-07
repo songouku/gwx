@@ -35,7 +35,7 @@ func (c *Config) Sign(param []string, signature string) bool {
 	return sign == signature
 }
 
-func (w *Config) Message(data string) (*constant.Message, error) {
+func (c *Config) Message(data string) (*constant.Message, error) {
 	var message constant.Message
 	err := util.ConvertXmlToStruct([]byte(data), &message)
 	if err != nil {
