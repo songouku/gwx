@@ -1,4 +1,4 @@
-package client
+package wx
 
 import (
 	"encoding/json"

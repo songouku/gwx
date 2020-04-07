@@ -1,4 +1,4 @@
-package client
+package wx
 
 import (
 	"crypto/sha1"
@@ -6,21 +6,21 @@ import (
 	"sort"
 )
 
-type WxConfig struct {
+type Config struct {
 	AppId  string `json:"appId"`
 	Secret string `json:"secret"`
 	Token  string `json:"token"`
 }
 
-func NewConfig(appId string, secret string, token string) *WxConfig {
-	return &WxConfig{
+func NewConfig(appId string, secret string, token string) *Config {
+	return &Config{
 		AppId:  appId,
 		Secret: secret,
 		Token:  token,
 	}
 }
 
-func (c *WxConfig) Sign(param []string, signature string) bool {
+func (c *Config) Sign(param []string, signature string) bool {
 	param = append(param, c.Token)
 	sort.Strings(param)
 	var str string
