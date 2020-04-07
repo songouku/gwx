@@ -9,7 +9,7 @@ import (
 	"github.com/songouku/gwx/util"
 )
 
-func (c *WxConfig) GetToken() (*model.Token, error) {
+func (c *Config) GetToken() (*model.Token, error) {
 	params := map[string]interface{}{
 		"grant_type": "client_credential",
 		"appid":      c.AppId,

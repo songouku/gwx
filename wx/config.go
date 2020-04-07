@@ -3,7 +3,10 @@ package wx
 import (
 	"crypto/sha1"
 	"encoding/hex"
+	"github.com/songouku/gwx/constant"
+	"github.com/songouku/gwx/util"
 	"sort"
+	"time"
 )
 
 type Config struct {
@@ -30,4 +33,39 @@ func (c *Config) Sign(param []string, signature string) bool {
 	valid := sha1.Sum([]byte(str))
 	sign := hex.EncodeToString(valid[:])
 	return sign == signature
+}
+
+func (w *Config) Message(data string) (*constant.Message, error) {
+	var message constant.Message
+	err := util.ConvertXmlToStruct([]byte(data), &message)
+	if err != nil {
+		return nil, err
+	}
+	return &message, nil
+}
+
+func (c *Config) Response(message *constant.Message) *constant.MsgResponse {
+	if message.MsgType == constant.EventMsg.Type {
+		return event(message)
+	}
+	return nil
+}
+
+func event(message *constant.Message) *constant.MsgResponse {
+	if message.Event == constant.Subscribe.Type {
+		content := "感谢关注测试公众号，此公众号正在调试中"
+		return subscribe(message, content)
+	}
+	return nil
+}
+
+//扫描关注
+func subscribe(message *constant.Message, content string) *constant.MsgResponse {
+	return &constant.MsgResponse{
+		FromUserName: message.ToUserName,
+		ToUserName:   message.FromUserName,
+		CreateTime:   time.Now().Unix(),
+		MsgType:      constant.TextMsg.Type,
+		Content:      content,
+	}
 }
