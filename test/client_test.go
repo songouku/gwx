@@ -2,50 +2,52 @@ package test
 
 import (
 	"fmt"
-	"gwx/client"
-	"gwx/util"
-	"io/ioutil"
+	"github.com/songouku/gwx/constant"
+	"github.com/songouku/gwx/util"
 	"testing"
 )
 
 var (
 	AppId  = "wxc5a30a91fda3c2de"
 	Secret = "79fff5da1f931bccd6814578cc413fee"
+	Token  = "zifeiyu"
 )
 
-var wx = client.NewClient(AppId, Secret)
-
-func TestToken(t *testing.T) {
-	token, err := wx.GetToken()
+func TestMedia(t *testing.T) {
+	//config := wx.NewConfig(AppId, Secret, Token)
+	filmName := "/Users/allen/Pictures/tt.jpeg"
+	token := "32_4LccVh6Il0SmYYKiMF0dU9JMT-eOdKSq-2PddQBwcxPIQ8YnZieu4KSa4oGUg4u9et3NYWwpd0CrO_fDGvpBJ3Dl4jmLcEETwMUZO3xpyhi2dJmQcjB2PMdrLILfViStfHXKtFNoEkjuKxt3BAQbAAAVUK"
+	//acc, err := config.GetToken()
+	//if err != nil {
+	//	fmt.Errorf("error is %v", err)
+	//	return
+	//}
+	//token := acc.AccessToken
+	//fmt.Printf("token is %s", token)
+	result, err := util.Upload(constant.CreateMedia, filmName, token, "image")
 	if err != nil {
-		fmt.Errorf("error is %v", err)
+		fmt.Errorf("upload image failed , error is %v", err)
 		return
 	}
-	fmt.Printf("res is %v", token)
+	fmt.Printf(result.MediaId)
 }
 
-func TestXmlParse(t *testing.T) {
-	str, err := ioutil.ReadFile("person.xml")
-	if err != nil {
-		t.Errorf("error is %v", err)
-		return
-	}
-	var result Company
-	err = util.ConvertXmlToStruct(str, &result)
-	if err != nil {
-		t.Errorf("error is %v", err)
-		return
-	}
-	fmt.Printf("result is %v", result)
+type User struct {
 }
 
-type Company struct {
-	Staff []Staff `xml:"staff"`
+func (u *User) login() {
+	fmt.Printf("111")
 }
 
-type Staff struct {
-	Id        string `xml:"id" json:"id"`
-	FirstName string `xml:"firstname" json:"firstName"`
-	LastName  string `xml:"lastname" json:"lastName"`
-	UserName  string `xml:"username" json:"userName"`
+func (u *User) loginOut() {
+	fmt.Printf("222")
+}
+
+func loginwx(service UserService) {
+	service.login()
+}
+
+func TestInterface(t *testing.T) {
+	user := new(User)
+	loginwx(user)
 }

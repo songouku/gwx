@@ -31,4 +31,8 @@ var (
 	//获取自定义菜单配置 GET
 	//https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN
 	QueryConditionalMenu = "https://api.weixin.qq.com/cgi-bin/menu/get"
+
+	//上传临时素材
+	//https://api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE
+	CreateMedia = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=%s&type=%s"
 )

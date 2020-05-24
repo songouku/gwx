@@ -1,10 +1,17 @@
 package util
 
 import (
-	"encoding/xml"
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"github.com/songouku/gwx/constant"
+	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -53,12 +60,54 @@ func Post(requestUrl string, data map[string]interface{}) (string, error) {
 	return string(body), nil
 }
 
-//xml数据转为实体
-// result 为指针类型
-func ConvertXmlToStruct(data []byte, result interface{}) error {
-	err := xml.Unmarshal(data, result)
+func Upload(url, fileName, token, mediaType string) (*constant.WxImage, error) {
+	//打开文件
+	fh, err := os.Open(fileName)
 	if err != nil {
-		return err
+		fmt.Errorf("error is %v", err.Error())
+		return nil, err
 	}
-	return nil
+	defer fh.Close()
+	bodyBuf := &bytes.Buffer{}
+	bodyWriter := multipart.NewWriter(bodyBuf)
+
+	fileWriter, err := bodyWriter.CreateFormFile(mediaType, filepath.Base(fileName))
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = io.Copy(fileWriter, fh)
+	if err != nil {
+		return nil, err
+	}
+	bodyWriter.Close()
+
+	//upload
+	req, err := http.NewRequest("POST", fmt.Sprintf(url, token, mediaType), bodyBuf)
+	req.Header.Add("Content-Type", bodyWriter.FormDataContentType())
+	urlQuery := req.URL.Query()
+	if err != nil {
+		return nil, err
+	}
+	urlQuery.Add("access_token", token)
+	urlQuery.Add("type", "image")
+
+	req.URL.RawQuery = urlQuery.Encode()
+	client := http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+	content, err := ioutil.ReadAll(res.Body)
+
+	if err != nil {
+		return nil, err
+	}
+	var result constant.WxImage
+	err = json.Unmarshal(content, &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
 }

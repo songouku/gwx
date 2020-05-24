@@ -19,7 +19,6 @@ func (c *Config) GetToken() (*model.Token, error) {
 	if err != nil {
 		return nil, errors.New("")
 	}
-	fmt.Printf("result is %s", res)
 	var token model.Token
 	err = json.Unmarshal([]byte(res), &token)
 	if err != nil {
