@@ -2,8 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/songouku/gwx/constant"
-	"github.com/songouku/gwx/util"
+	"github.com/songouku/gwx/wx"
 	"testing"
 )
 
@@ -13,41 +12,44 @@ var (
 	Token  = "zifeiyu"
 )
 
-func TestMedia(t *testing.T) {
-	//config := wx.NewConfig(AppId, Secret, Token)
-	filmName := "/Users/allen/Pictures/tt.jpeg"
-	token := "32_4LccVh6Il0SmYYKiMF0dU9JMT-eOdKSq-2PddQBwcxPIQ8YnZieu4KSa4oGUg4u9et3NYWwpd0CrO_fDGvpBJ3Dl4jmLcEETwMUZO3xpyhi2dJmQcjB2PMdrLILfViStfHXKtFNoEkjuKxt3BAQbAAAVUK"
-	//acc, err := config.GetToken()
-	//if err != nil {
-	//	fmt.Errorf("error is %v", err)
-	//	return
-	//}
-	//token := acc.AccessToken
-	//fmt.Printf("token is %s", token)
-	result, err := util.Upload(constant.CreateMedia, filmName, token, "image")
+var config *wx.Config
+var token = "33_0cnu0HWyu2FJvoqTLzwqwfAch21qjZnbNqxmF2asMIXFNLEvR5VEGX-gN2EMMmohZnWrkXWp9nygW3G71UPJbAu2AQm28RJF8o33clTSVDxIjnY1V2nCUm7yhhY4UeXmkxqJMTKHlzAFdaWBNSMdAFARWQ"
+
+func init() {
+	config = wx.NewConfig(AppId, Secret, Token)
+}
+
+func TestToken(t *testing.T) {
+	acc, err := config.GetToken()
 	if err != nil {
-		fmt.Errorf("upload image failed , error is %v", err)
+		fmt.Errorf("error is %v\n", err)
 		return
 	}
-	fmt.Printf(result.MediaId)
+	token := acc.AccessToken
+	fmt.Printf("token is %s\n", token)
 }
 
-type User struct {
+func TestTmpMedia(t *testing.T) {
+	filmName := "/Users/allen/Pictures/tt.jpeg"
+	fmt.Printf("msgId is %s", config.UploadTmpMedia(token, filmName))
 }
 
-func (u *User) login() {
-	fmt.Printf("111")
+func TestMedia(t *testing.T) {
+	filmName := "/Users/allen/Pictures/tt.jpeg"
+	res, err := config.UploadImg(token, filmName)
+	if err != nil {
+		fmt.Errorf("error is %v\n", err)
+		return
+	}
+	fmt.Printf("msgId is %v\n", res)
 }
 
-func (u *User) loginOut() {
-	fmt.Printf("222")
-}
-
-func loginwx(service UserService) {
-	service.login()
-}
-
-func TestInterface(t *testing.T) {
-	user := new(User)
-	loginwx(user)
+func TestMaterial(t *testing.T) {
+	filmName := "/Users/allen/Pictures/tt.jpeg"
+	res, err := config.UploadImg(token, filmName)
+	if err != nil {
+		fmt.Errorf("error is %v\n", err)
+		return
+	}
+	fmt.Printf("msgId is %v\n", res)
 }

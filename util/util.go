@@ -2,9 +2,7 @@ package util
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
-	"github.com/songouku/gwx/constant"
 	"io"
 	"io/ioutil"
 	"mime/multipart"
@@ -60,7 +58,7 @@ func Post(requestUrl string, data map[string]interface{}) (string, error) {
 	return string(body), nil
 }
 
-func Upload(url, fileName, token, mediaType string) (*constant.WxImage, error) {
+func Upload(url, fileName, token, mediaType string) ([]byte, error) {
 	//打开文件
 	fh, err := os.Open(fileName)
 	if err != nil {
@@ -83,7 +81,7 @@ func Upload(url, fileName, token, mediaType string) (*constant.WxImage, error) {
 	bodyWriter.Close()
 
 	//upload
-	req, err := http.NewRequest("POST", fmt.Sprintf(url, token, mediaType), bodyBuf)
+	req, err := http.NewRequest("POST", url, bodyBuf)
 	req.Header.Add("Content-Type", bodyWriter.FormDataContentType())
 	urlQuery := req.URL.Query()
 	if err != nil {
@@ -99,15 +97,5 @@ func Upload(url, fileName, token, mediaType string) (*constant.WxImage, error) {
 		return nil, err
 	}
 	defer res.Body.Close()
-	content, err := ioutil.ReadAll(res.Body)
-
-	if err != nil {
-		return nil, err
-	}
-	var result constant.WxImage
-	err = json.Unmarshal(content, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return ioutil.ReadAll(res.Body)
 }

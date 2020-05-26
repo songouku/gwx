@@ -35,4 +35,10 @@ var (
 	//上传临时素材
 	//https://api.weixin.qq.com/cgi-bin/media/upload?access_token=ACCESS_TOKEN&type=TYPE
 	CreateMedia = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=%s&type=%s"
+
+	//上传图文消息内的图片获取URL
+	UploadImg = "https://api.weixin.qq.com/cgi-bin/media/uploadimg"
+
+	//上传其他永久素材
+	AddMaterial = "https https://api.weixin.qq.com/cgi-bin/material/add_material"
 )

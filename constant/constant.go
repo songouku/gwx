@@ -46,3 +46,15 @@ var (
 	ScanEvent     = Event{Type: "SCAN", Desc: "用户已关注时的事件推送"}
 	Subscribe     = Event{Type: "subscribe", Desc: "扫描带参数二维码事件"}
 )
+
+type MediaType struct {
+	Type string
+	Desc string
+}
+
+var (
+	Image = MediaType{Type: "image", Desc: "图片素材"}
+	Voice = MediaType{Type: "voice", Desc: "音频素材"}
+	Video = MediaType{Type: "video", Desc: "视频素材"}
+	Thumb = MediaType{Type: "thumb", Desc: "缩略图"}
+)
