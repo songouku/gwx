@@ -13,7 +13,7 @@ var (
 )
 
 var config *wx.Config
-var token = "33_0cnu0HWyu2FJvoqTLzwqwfAch21qjZnbNqxmF2asMIXFNLEvR5VEGX-gN2EMMmohZnWrkXWp9nygW3G71UPJbAu2AQm28RJF8o33clTSVDxIjnY1V2nCUm7yhhY4UeXmkxqJMTKHlzAFdaWBNSMdAFARWQ"
+var token = "33_MPO9XV6KhSIPvlInF4eTI8pqxNMggqh1J99nzpba3fKsd-ZBMhi2iv71G5juOZuGa6CqB4T7DbzPlEmybvTby1bJxcM6QXFnIpJi1S2fwL5-McXXjmmgLFw10ybLT1TniCKXtNnkbj8yyrI8CDHfAFAKLP"
 
 func init() {
 	config = wx.NewConfig(AppId, Secret, Token)
@@ -31,7 +31,12 @@ func TestToken(t *testing.T) {
 
 func TestTmpMedia(t *testing.T) {
 	filmName := "/Users/allen/Pictures/tt.jpeg"
-	fmt.Printf("msgId is %s", config.UploadTmpMedia(token, filmName))
+	res, err := config.UploadTmpMedia(token, filmName)
+	if err != nil {
+		fmt.Errorf("error is %v\n", err)
+		return
+	}
+	fmt.Printf("msgId is %v\n", res)
 }
 
 func TestMedia(t *testing.T) {
@@ -47,6 +52,16 @@ func TestMedia(t *testing.T) {
 func TestMaterial(t *testing.T) {
 	filmName := "/Users/allen/Pictures/tt.jpeg"
 	res, err := config.UploadImg(token, filmName)
+	if err != nil {
+		fmt.Errorf("error is %v\n", err)
+		return
+	}
+	fmt.Printf("msgId is %v\n", res)
+}
+
+func TestGetTmpMaterial(t *testing.T) {
+	mediaId := "lEnSJW54UWeWNBPFTqpkFc95U0DbMoKBgXyyDdnsWlfFkOLdLc-32Nc0ZJle9EWH"
+	res, err := config.GetTmpMaterial(token, mediaId)
 	if err != nil {
 		fmt.Errorf("error is %v\n", err)
 		return

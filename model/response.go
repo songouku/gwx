@@ -1,4 +1,4 @@
-package constant
+package model
 
 //<editor-fold desc="消息回复体">
 type TextMessageResponse struct {
@@ -61,3 +61,10 @@ type NewsMessageResponse struct {
 }
 
 //</editor-fold>
+
+type TokenResponse struct {
+	AccessToken string `json:"access_token"`
+	ExpiresIn   int    `json:"expires_in"`
+	ErrCode     int    `json:"errcode"`
+	ErrMsg      string `json:"errmsg"`
+}

@@ -41,4 +41,7 @@ var (
 
 	//上传其他永久素材
 	AddMaterial = "https https://api.weixin.qq.com/cgi-bin/material/add_material"
+
+	//获取临时素材
+	GetTmpMaterial = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=%s&media_id=%s"
 )

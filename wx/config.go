@@ -3,7 +3,7 @@ package wx
 import (
 	"crypto/sha1"
 	"encoding/hex"
-	"github.com/songouku/gwx/constant"
+	"github.com/songouku/gwx/model"
 	"sort"
 )
 
@@ -12,99 +12,99 @@ type Config struct {
 	Secret string `json:"secret"`
 	Token  string `json:"token"`
 
-	txtMessage      constant.TxtMessage
-	imageMessage    constant.ImageMessage
-	voiceMessage    constant.VoiceMessage
-	videoMessage    constant.VideoMessage
-	locationMessage constant.LocationMessage
-	linkMessage     constant.LinkMessage
+	txtMessage      model.TxtMessage
+	imageMessage    model.ImageMessage
+	voiceMessage    model.VoiceMessage
+	videoMessage    model.VideoMessage
+	locationMessage model.LocationMessage
+	linkMessage     model.LinkMessage
 
-	subscribeEvent constant.SubscribeEventMessage
-	locationEvent  constant.LocationEventMessage
-	clickEvent     constant.ClickEventMessage
-	viewEvent      constant.ViewEventMessage
+	subscribeEvent model.SubscribeEventMessage
+	locationEvent  model.LocationEventMessage
+	clickEvent     model.ClickEventMessage
+	viewEvent      model.ViewEventMessage
 
 	currentMsgType string
 }
 
-func (c *Config) SetTxtMessage(msg constant.TxtMessage) {
+func (c *Config) SetTxtMessage(msg model.TxtMessage) {
 	c.txtMessage = msg
 }
 
-func (c *Config) GetTxtMessage() constant.TxtMessage {
+func (c *Config) GetTxtMessage() model.TxtMessage {
 	return c.txtMessage
 }
 
-func (c *Config) SetImageMessage(msg constant.ImageMessage) {
+func (c *Config) SetImageMessage(msg model.ImageMessage) {
 	c.imageMessage = msg
 }
 
-func (c *Config) GetImageMessage() constant.ImageMessage {
+func (c *Config) GetImageMessage() model.ImageMessage {
 	return c.imageMessage
 }
 
-func (c *Config) SetVoiceMessage(msg constant.VoiceMessage) {
+func (c *Config) SetVoiceMessage(msg model.VoiceMessage) {
 	c.voiceMessage = msg
 }
 
-func (c *Config) GetVoiceMessage() constant.VoiceMessage {
+func (c *Config) GetVoiceMessage() model.VoiceMessage {
 	return c.voiceMessage
 }
 
-func (c *Config) SetVideoMessage(msg constant.VideoMessage) {
+func (c *Config) SetVideoMessage(msg model.VideoMessage) {
 	c.videoMessage = msg
 }
 
-func (c *Config) GetVideoMessage() constant.VideoMessage {
+func (c *Config) GetVideoMessage() model.VideoMessage {
 	return c.videoMessage
 }
 
-func (c *Config) SetLocationMessage(msg constant.LocationMessage) {
+func (c *Config) SetLocationMessage(msg model.LocationMessage) {
 	c.locationMessage = msg
 }
 
-func (c *Config) GetLocationMessage() constant.LocationMessage {
+func (c *Config) GetLocationMessage() model.LocationMessage {
 	return c.locationMessage
 }
 
-func (c *Config) SetLinkMessage(msg constant.LinkMessage) {
+func (c *Config) SetLinkMessage(msg model.LinkMessage) {
 	c.linkMessage = msg
 }
 
-func (c *Config) GetLinkMessage() constant.LinkMessage {
+func (c *Config) GetLinkMessage() model.LinkMessage {
 	return c.linkMessage
 
 }
 
-func (c *Config) SetSubscribeEventMessage(event constant.SubscribeEventMessage) {
+func (c *Config) SetSubscribeEventMessage(event model.SubscribeEventMessage) {
 	c.subscribeEvent = event
 }
 
-func (c *Config) GetSubscribeEventMessage() constant.SubscribeEventMessage {
+func (c *Config) GetSubscribeEventMessage() model.SubscribeEventMessage {
 	return c.subscribeEvent
 }
 
-func (c *Config) SetLocationEventMessage(event constant.LocationEventMessage) {
+func (c *Config) SetLocationEventMessage(event model.LocationEventMessage) {
 	c.locationEvent = event
 }
 
-func (c *Config) GetLocationEventMessage() constant.LocationEventMessage {
+func (c *Config) GetLocationEventMessage() model.LocationEventMessage {
 	return c.locationEvent
 }
 
-func (c *Config) SetClickEventMessage(event constant.ClickEventMessage) {
+func (c *Config) SetClickEventMessage(event model.ClickEventMessage) {
 	c.clickEvent = event
 }
 
-func (c *Config) GetClickEventMessage() constant.ClickEventMessage {
+func (c *Config) GetClickEventMessage() model.ClickEventMessage {
 	return c.clickEvent
 }
 
-func (c *Config) SetViewEventMessage(event constant.ViewEventMessage) {
+func (c *Config) SetViewEventMessage(event model.ViewEventMessage) {
 	c.viewEvent = event
 }
 
-func (c *Config) GetViewEventMessage() constant.ViewEventMessage {
+func (c *Config) GetViewEventMessage() model.ViewEventMessage {
 	return c.viewEvent
 }
 

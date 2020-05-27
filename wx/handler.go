@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"errors"
 	"github.com/songouku/gwx/constant"
+	"github.com/songouku/gwx/model"
 )
 
 type IMessageHandler interface {
@@ -20,7 +21,7 @@ type IMessageHandler interface {
 }
 
 func (c *Config) HandlerMessage(content string) error {
-	msg := constant.Message{}
+	msg := model.Message{}
 	err := xml.Unmarshal([]byte(content), &msg)
 	if err != nil {
 		return err
@@ -31,7 +32,7 @@ func (c *Config) HandlerMessage(content string) error {
 		//事件消息
 		if msg.Event == constant.ClickEvent.Type {
 			//点击事件
-			c.SetClickEventMessage(constant.ClickEventMessage{
+			c.SetClickEventMessage(model.ClickEventMessage{
 				ToUserName:   msg.ToUserName,
 				FromUserName: msg.FromUserName,
 				CreateTime:   msg.CreateTime,
@@ -42,7 +43,7 @@ func (c *Config) HandlerMessage(content string) error {
 			return nil
 		} else if msg.Event == constant.Subscribe.Type {
 			//关注/取消关注事件
-			c.SetSubscribeEventMessage(constant.SubscribeEventMessage{
+			c.SetSubscribeEventMessage(model.SubscribeEventMessage{
 				ToUserName:   msg.ToUserName,
 				FromUserName: msg.FromUserName,
 				CreateTime:   msg.CreateTime,
@@ -53,7 +54,7 @@ func (c *Config) HandlerMessage(content string) error {
 			return nil
 		} else if msg.Event == constant.LocationEvent.Type {
 			//上报位置事件
-			c.SetLocationEventMessage(constant.LocationEventMessage{
+			c.SetLocationEventMessage(model.LocationEventMessage{
 				ToUserName:   msg.ToUserName,
 				FromUserName: msg.FromUserName,
 				CreateTime:   msg.CreateTime,
@@ -65,7 +66,7 @@ func (c *Config) HandlerMessage(content string) error {
 			return nil
 		} else if msg.Event == constant.ViewEvent.Type {
 			//视图事件
-			c.SetViewEventMessage(constant.ViewEventMessage{
+			c.SetViewEventMessage(model.ViewEventMessage{
 				ToUserName:   msg.ToUserName,
 				FromUserName: msg.FromUserName,
 				CreateTime:   msg.CreateTime,
@@ -77,7 +78,7 @@ func (c *Config) HandlerMessage(content string) error {
 		}
 	} else if msg.MsgType == constant.TextMsg.Type {
 		//文本消息
-		c.SetTxtMessage(constant.TxtMessage{
+		c.SetTxtMessage(model.TxtMessage{
 			ToUserName:   msg.ToUserName,
 			FromUserName: msg.FromUserName,
 			CreateTime:   msg.CreateTime,
@@ -88,7 +89,7 @@ func (c *Config) HandlerMessage(content string) error {
 		return nil
 	} else if msg.MsgType == constant.ImageMsg.Type {
 		//图片
-		c.SetImageMessage(constant.ImageMessage{
+		c.SetImageMessage(model.ImageMessage{
 			ToUserName:   msg.ToUserName,
 			FromUserName: msg.FromUserName,
 			CreateTime:   msg.CreateTime,
@@ -100,7 +101,7 @@ func (c *Config) HandlerMessage(content string) error {
 		return nil
 	} else if msg.MsgType == constant.VoiceMsg.Type {
 		//语音
-		c.SetVoiceMessage(constant.VoiceMessage{
+		c.SetVoiceMessage(model.VoiceMessage{
 			ToUserName:   msg.ToUserName,
 			FromUserName: msg.ToUserName,
 			CreateTime:   msg.CreateTime,
@@ -112,7 +113,7 @@ func (c *Config) HandlerMessage(content string) error {
 		return nil
 	} else if msg.MsgType == constant.VideoMsg.Type {
 		//视频
-		c.SetVideoMessage(constant.VideoMessage{
+		c.SetVideoMessage(model.VideoMessage{
 			ToUserName:   msg.ToUserName,
 			FromUserName: msg.FromUserName,
 			CreateTime:   msg.CreateTime,
@@ -126,7 +127,7 @@ func (c *Config) HandlerMessage(content string) error {
 		//小视频
 	} else if msg.MsgType == constant.LocationMsg.Type {
 		//位置消息
-		c.SetLocationMessage(constant.LocationMessage{
+		c.SetLocationMessage(model.LocationMessage{
 			ToUserName:   msg.ToUserName,
 			FromUserName: msg.FromUserName,
 			CreateTime:   msg.CreateTime,
@@ -140,7 +141,7 @@ func (c *Config) HandlerMessage(content string) error {
 		return nil
 	} else if msg.MsgType == constant.LinkMsg.Type {
 		//链接消息
-		c.SetLinkMessage(constant.LinkMessage{
+		c.SetLinkMessage(model.LinkMessage{
 			ToUserName:   msg.ToUserName,
 			FromUserName: msg.FromUserName,
 			CreateTime:   msg.CreateTime,
