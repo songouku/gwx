@@ -1,6 +1,7 @@
 package model
 
 type Message struct {
+	Encrypt      string
 	ToUserName   string
 	FromUserName string
 	CreateTime   string
