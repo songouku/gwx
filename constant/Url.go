@@ -6,15 +6,15 @@ var (
 
 	//创建菜单 POST
 	// https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN
-	CreateMenu = "https://api.weixin.qq.com/cgi-bin/menu/create"
+	CreateMenu = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=%s"
 
 	//获取菜单 POST
 	//https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info?access_token=ACCESS_TOKEN
-	QueryMenu = "https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info"
+	QueryMenu = "https://api.weixin.qq.com/cgi-bin/get_current_selfmenu_info?access_token=%s"
 
 	//删除菜单 GET
 	//https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN
-	DelMenu = "https://api.weixin.qq.com/cgi-bin/menu/delete"
+	DelMenu = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=%s"
 
 	//创建个性化菜单 POST
 	//https://api.weixin.qq.com/cgi-bin/menu/addconditional?access_token=ACCESS_TOKEN

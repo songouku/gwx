@@ -142,19 +142,6 @@ type Token struct {
 	ErrMsg      string `json:"errmsg,omitempty"`
 }
 
-type MenuItem struct {
-	Type      string     `json:"type"`
-	Name      string     `json:"name"`
-	Key       string     `json:"key"`
-	Url       string     `json:"url"`
-	AppId     string     `json:"appid"`
-	PagePath  string     `json:"pagepath"`
-	SubButton []MenuItem `json:"sub_button"`
-}
-
-type MenuModel struct {
-}
-
 //永久素材
 
 //临时素材

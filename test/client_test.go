@@ -14,10 +14,18 @@ var (
 )
 
 var config *wx.Config
-var token = "33_7idsR4DaDFyZZ1sgo2zxNsA2sgTzgFElRSt-uXkjaoHVCIZXtqptwrCU27Cp7qKWWrPkDNPMa2nfdmum6efx917XWxnNk0qPwTmVunvsW5VddpSnc5vYJsynruVw4j541Hie4aMqPxQqosliIUGdAIATFR"
+var token = "33_d3PylGkPFkYrMsEcbLiJq9YLJjS2Hp4ETbYh4KR9EJU8Xw9i8oD5Py3z6VKMLWVnfwzZ1PaZZtNXet1oBzHElrf6tC1tSf5NJ8CTzLMJMLJ91bFzExfFhoCdnuiKr4QU1SNvuOQRSxjUIHOpHYLeAIABSF"
 
 func init() {
 	config = wx.NewConfig(AppId, Secret, Token)
+}
+
+func console(data interface{}, err error) {
+	if err != nil {
+		fmt.Errorf("error is %v\n", err)
+		return
+	}
+	fmt.Printf("result is %v\n", data)
 }
 
 func TestToken(t *testing.T) {
@@ -32,42 +40,22 @@ func TestToken(t *testing.T) {
 
 func TestTmpMedia(t *testing.T) {
 	filmName := "/Users/allen/Pictures/tt.jpeg"
-	res, err := wx.UploadTmpMedia(token, filmName)
-	if err != nil {
-		fmt.Errorf("error is %v\n", err)
-		return
-	}
-	fmt.Printf("msgId is %v\n", res)
+	console(wx.UploadTmpMedia(token, filmName))
 }
 
 func TestMedia(t *testing.T) {
 	filmName := "/Users/allen/Pictures/tt.jpeg"
-	res, err := wx.UploadImg(token, filmName)
-	if err != nil {
-		fmt.Errorf("error is %v\n", err)
-		return
-	}
-	fmt.Printf("msgId is %v\n", res)
+	console(wx.UploadImg(token, filmName))
 }
 
 func TestMaterial(t *testing.T) {
 	filmName := "/Users/allen/Pictures/tt.jpeg"
-	res, err := wx.AddMaterial(token, filmName, constant.Thumb)
-	if err != nil {
-		fmt.Errorf("error is %v\n", err)
-		return
-	}
-	fmt.Printf("msgId is %v\n", res)
+	console(wx.AddMaterial(token, filmName, constant.Thumb))
 }
 
 func TestGetTmpMaterial(t *testing.T) {
 	mediaId := "lEnSJW54UWeWNBPFTqpkFc95U0DbMoKBgXyyDdnsWlfFkOLdLc-32Nc0ZJle9EWH"
-	res, err := wx.GetTmpMaterial(token, mediaId)
-	if err != nil {
-		fmt.Errorf("error is %v\n", err)
-		return
-	}
-	fmt.Printf("msgId is %v\n", res)
+	console(wx.GetTmpMaterial(token, mediaId))
 }
 
 func TestAddNews(t *testing.T) {
@@ -85,52 +73,46 @@ func TestAddNews(t *testing.T) {
 		},
 	}
 	args := wx.New{Articles: news}
-	res, err := wx.AddNews(token, args)
-	if err != nil {
-		fmt.Errorf("error is %v\n", err)
-		return
-	}
-	fmt.Printf("res is %v", res)
+	console(wx.AddNews(token, args))
 }
 
 func TestGetMaterial(t *testing.T) {
 	mediaId := "0GPeqeABYec913q2Ho6p6S27QW8Bgb4DDXhx3cmoeeE"
-	res, err := wx.GetMaterial(token, mediaId)
-	if err != nil {
-		fmt.Errorf("error is %v\n", err.Error())
-		return
-	}
-	fmt.Printf("res is %v\n", res.NewsItem)
+	console(wx.GetMaterial(token, mediaId))
 }
 
 func TestBatchMaterial(t *testing.T) {
-	res, err := wx.BatchGetMaterial(token, wx.BatchGetMaterialArgs{
+	console(wx.BatchGetMaterial(token, wx.BatchGetMaterialArgs{
 		Type:   constant.News.Type,
 		Offset: 0,
 		Count:  20,
-	})
-	if err != nil {
-		fmt.Printf("error is %v\n", err)
-		return
-	}
-	fmt.Printf("res is %v\n", res)
+	}))
 }
 
 func TestMaterialCount(t *testing.T) {
-	res, err := wx.GetMaterialCount(token)
-	if err != nil {
-		fmt.Printf("error is %v\n", err)
-		return
-	}
-	fmt.Printf("res is %v\n", res)
+	console(wx.GetMaterialCount(token))
 }
 
 func TestDelMaterial(t *testing.T) {
 	mediaId := "0GPeqeABYec913q2Ho6p6S27QW8Bgb4DDXhx3cmoeeE"
-	res, err := wx.DelMaterial(token, mediaId)
-	if err != nil {
-		fmt.Printf("error is %v\n", err)
-		return
+	console(wx.DelMaterial(token, mediaId))
+}
+func TestCreateMenu(t *testing.T) {
+	button := wx.Button{
+		Type: constant.Click.Key,
+		Name: "百度",
+		Key:  "baidu",
 	}
-	fmt.Printf("res is %v\n", res)
+	args := wx.CreateMenuArgs{
+		Button: []wx.Button{button},
+	}
+	console(wx.CreateMenu(token, args))
+}
+
+func TestQueryMenu(t *testing.T) {
+	console(wx.QueryMenu(token))
+}
+
+func TestDelMenu(t *testing.T) {
+	console(wx.DelMenu(token))
 }

@@ -212,20 +212,15 @@ func GetMaterialCount(token string) (*MaterialCount, error) {
 	return &result, nil
 }
 
-type DelMaterialResponse struct {
-	ErrCode int    `json:"errcode"`
-	ErrMsg  string `json:"errmsg"`
-}
-
 //删除素材
-func DelMaterial(token, mediaId string) (*DelMaterialResponse, error) {
+func DelMaterial(token, mediaId string) (*model.Response, error) {
 	param := make(map[string]interface{})
 	param["media_id"] = mediaId
 	res, err := util.Post(fmt.Sprintf(constant.DelMaterial, token), param)
 	if err != nil {
 		return nil, err
 	}
-	var result DelMaterialResponse
+	var result model.Response
 	err = json.Unmarshal(res, &result)
 	if err != nil {
 		return nil, err
