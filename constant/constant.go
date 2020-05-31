@@ -57,4 +57,5 @@ var (
 	Voice = MediaType{Type: "voice", Desc: "音频素材"}
 	Video = MediaType{Type: "video", Desc: "视频素材"}
 	Thumb = MediaType{Type: "thumb", Desc: "缩略图"}
+	News  = MediaType{Type: "news", Desc: "图文素材"}
 )

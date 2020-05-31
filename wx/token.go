@@ -15,12 +15,12 @@ func (c *Config) GetToken() (*model.Token, error) {
 		"appid":      c.AppId,
 		"secret":     c.Secret,
 	}
-	res, err := util.Get(params, constant.Token)
+	res, err := util.Get(constant.Token, params)
 	if err != nil {
 		return nil, errors.New("")
 	}
 	var token model.Token
-	err = json.Unmarshal([]byte(res), &token)
+	err = json.Unmarshal(res, &token)
 	if err != nil {
 		fmt.Errorf("decode failed , error is %v", err)
 		return nil, errors.New(err.Error())

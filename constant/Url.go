@@ -40,8 +40,23 @@ var (
 	UploadImg = "https://api.weixin.qq.com/cgi-bin/media/uploadimg"
 
 	//上传其他永久素材
-	AddMaterial = "https https://api.weixin.qq.com/cgi-bin/material/add_material"
+	AddMaterial = "https://api.weixin.qq.com/cgi-bin/material/add_material?access_token=%s&type%s"
 
 	//获取临时素材
 	GetTmpMaterial = "https://api.weixin.qq.com/cgi-bin/media/get?access_token=%s&media_id=%s"
+
+	//获取永久素材
+	GetMaterial = "https://api.weixin.qq.com/cgi-bin/material/get_material?access_token=%s"
+
+	//添加图文素材
+	AddNews = "https://api.weixin.qq.com/cgi-bin/material/add_news?access_token=%s"
+
+	//获取素材列表
+	BatchGetMaterial = "https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token=%s"
+
+	//获取素材数量
+	GetMaterialCount = "https://api.weixin.qq.com/cgi-bin/material/get_materialcount?access_token=%s"
+
+	//删除素材
+	DelMaterial = "https://api.weixin.qq.com/cgi-bin/material/del_material?access_token=%s"
 )

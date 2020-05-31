@@ -156,20 +156,12 @@ type MenuModel struct {
 }
 
 //永久素材
-type WxMedia struct {
-	MediaId      string `json:"media_id"`
-	Url          string `json:"url"`
-	Title        string `json:"title"`
-	Introduction string `json:"introduction"`
-	ErrCode      string `json:"errcode"`
-	ErrMsg       string `json:"errmsg"`
-}
 
 //临时素材
 type WxImage struct {
 	Type      string `json:"type"`
 	MediaId   string `json:"media_id"`
 	CreatedAt int    `json:"created_at"`
-	ErrCode   string `json:"errcode"`
+	ErrCode   int    `json:"errcode"`
 	ErrMsg    string `json:"errmsg"`
 }
