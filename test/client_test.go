@@ -8,16 +8,17 @@ import (
 )
 
 var (
-	AppId  = "wxc5a30a91fda3c2de"
-	Secret = "79fff5da1f931bccd6814578cc413fee"
-	Token  = "zifeiyu"
+	AppId       = "wxc5a30a91fda3c2de"
+	Secret      = "79fff5da1f931bccd6814578cc413fee"
+	Token       = "zifeiyu"
+	EncodingKey = "h3gJrFDBcvJL29iJOl9ITNH1L0mH05WqW1haZTZbShr"
 )
 
 var config *wx.Config
 var token = "33_d3PylGkPFkYrMsEcbLiJq9YLJjS2Hp4ETbYh4KR9EJU8Xw9i8oD5Py3z6VKMLWVnfwzZ1PaZZtNXet1oBzHElrf6tC1tSf5NJ8CTzLMJMLJ91bFzExfFhoCdnuiKr4QU1SNvuOQRSxjUIHOpHYLeAIABSF"
 
 func init() {
-	config = wx.NewConfig(AppId, Secret, Token)
+	config = wx.NewConfig(AppId, Secret, Token, EncodingKey)
 }
 
 func console(data interface{}, err error) {
@@ -115,4 +116,9 @@ func TestQueryMenu(t *testing.T) {
 
 func TestDelMenu(t *testing.T) {
 	console(wx.DelMenu(token))
+}
+
+func TestAes(t *testing.T) {
+	content := "BYFSjVEEMS/U6ZzOETIxTlx+7fZVwkmOX95CoLsPd/t3p/GS9pDuJ3pfuHHASv7a4FHlr3Ix5NHZ9mefCFzWCF2TabS9EqSl1v1RxyB04o4bkkp0MAufLTofvAIijTOGeIzQwEI95SImWT1hk6tdCfy3K1eMjyQrVl22cxSEIwF4xEZOS+SnhORFi/5J+qEagX9ZZTkBBX8EI1l7ZZ/KVhPam1WQQ4r+3VnzcHj0y5w/EQhLGt9FlglHMXnhBxgwCAJ062JESRSy8aqEDI/RMbPaXAxbkvAc9og0HOGw9Z8Cyp2PuldUmuHQWXogLD5M24R0/FZah1qpfIpxSoNJDOBREjwB9OVfCxBXlC6KsqeNv4xHzBK8xLI94QUBg+w/Xlmw/eXMmhijz29lC1xpJCCEaKo1gyKyNZxflaouTeE="
+	console(config.Decrypt(content))
 }

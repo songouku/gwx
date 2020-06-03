@@ -2,15 +2,20 @@ package wx
 
 import (
 	"crypto/sha1"
+	"encoding/base64"
 	"encoding/hex"
+	"encoding/xml"
+	"fmt"
 	"github.com/songouku/gwx/model"
+	"github.com/songouku/gwx/util"
 	"sort"
 )
 
 type Config struct {
-	AppId  string `json:"appId"`
-	Secret string `json:"secret"`
-	Token  string `json:"token"`
+	AppId       string `json:"appId"`
+	Secret      string `json:"secret"`
+	Token       string `json:"token"`
+	EncodingKey string
 
 	txtMessage      model.TxtMessage
 	imageMessage    model.ImageMessage
@@ -116,11 +121,12 @@ func (c *Config) GetCurrentMsg() string {
 	return c.currentMsgType
 }
 
-func NewConfig(appId string, secret string, token string) *Config {
+func NewConfig(appId, secret, token, EncodingKey string) *Config {
 	return &Config{
-		AppId:  appId,
-		Secret: secret,
-		Token:  token,
+		AppId:       appId,
+		Secret:      secret,
+		Token:       token,
+		EncodingKey: EncodingKey,
 	}
 }
 
@@ -134,4 +140,27 @@ func (c *Config) Sign(param []string, signature string) bool {
 	valid := sha1.Sum([]byte(str))
 	sign := hex.EncodeToString(valid[:])
 	return sign == signature
+}
+
+func (c *Config) Decrypt(content string) (*model.Message, error) {
+	aesKey, err := base64.StdEncoding.DecodeString(c.EncodingKey + "=")
+	if err != nil {
+		return nil, err
+	}
+	tmp, err := base64.StdEncoding.DecodeString(content)
+	if err != nil {
+		return nil, err
+	}
+	res, err := util.AesDecrypt(tmp, aesKey)
+	if err != nil {
+		return nil, err
+	}
+	s := string(res[20 : len(res)-18])
+	var result model.Message
+	err = xml.Unmarshal([]byte(s), &tmp)
+	if err != nil {
+		fmt.Errorf("error is %s\n", err.Error())
+		return nil, err
+	}
+	return &result, err
 }
