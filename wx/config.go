@@ -157,7 +157,7 @@ func (c *Config) Decrypt(content string) (*model.Message, error) {
 	}
 	s := string(res[20 : len(res)-18])
 	var result model.Message
-	err = xml.Unmarshal([]byte(s), &tmp)
+	err = xml.Unmarshal([]byte(s), &result)
 	if err != nil {
 		fmt.Errorf("error is %s\n", err.Error())
 		return nil, err

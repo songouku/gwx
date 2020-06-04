@@ -1,8 +1,10 @@
 package test
 
 import (
+	"encoding/xml"
 	"fmt"
 	"github.com/songouku/gwx/constant"
+	"github.com/songouku/gwx/model"
 	"github.com/songouku/gwx/wx"
 	"testing"
 )
@@ -119,6 +121,12 @@ func TestDelMenu(t *testing.T) {
 }
 
 func TestAes(t *testing.T) {
-	content := "BYFSjVEEMS/U6ZzOETIxTlx+7fZVwkmOX95CoLsPd/t3p/GS9pDuJ3pfuHHASv7a4FHlr3Ix5NHZ9mefCFzWCF2TabS9EqSl1v1RxyB04o4bkkp0MAufLTofvAIijTOGeIzQwEI95SImWT1hk6tdCfy3K1eMjyQrVl22cxSEIwF4xEZOS+SnhORFi/5J+qEagX9ZZTkBBX8EI1l7ZZ/KVhPam1WQQ4r+3VnzcHj0y5w/EQhLGt9FlglHMXnhBxgwCAJ062JESRSy8aqEDI/RMbPaXAxbkvAc9og0HOGw9Z8Cyp2PuldUmuHQWXogLD5M24R0/FZah1qpfIpxSoNJDOBREjwB9OVfCxBXlC6KsqeNv4xHzBK8xLI94QUBg+w/Xlmw/eXMmhijz29lC1xpJCCEaKo1gyKyNZxflaouTeE="
-	console(config.Decrypt(content))
+	str := " <xml>\n    <ToUserName><![CDATA[gh_b2eeb48362f3]]></ToUserName>\n    <Encrypt><![CDATA[37+xerWBnoHHcv0hPcZaJfhwLiFcc2LgJPnxdwITdgXx54y30v5jN5iz4b4fLMS84oLFqJ0TYoK6yK1i4ulsx4N15tWnDcqOWZNn+dYk8eTs6V1hw9df6EpBemJSQ/f0WgxsJnE3kmc0Fpm72l+zS4Th9QwxsJTgEpnMjAddHWMYkgrfNm8n9SFMXd/1m8Y5rEm4osYW3u21+2h0gao/h5jk3BpchMVcBMu1TgHPjYNenWA1f7tLxYJ2V4/C5iQk9WIBnRA0VvPxByyBRX3DX9We7KriPJHEntRZPqtjbYXBr001V1sPd1IMPdS78uv0symDrsFmDPXvRXF3Wgx4/rjv7q8AIz+TAD/sFI3MajVN7MYaP1kLZ6DyDtU1pO3HVhs9q544izTYfO4Ai3vSfiS20EKf5GZ2sPlwAKJSZZY=]]></Encrypt>\n</xml>"
+	var res model.Message
+	err := xml.Unmarshal([]byte(str), &res)
+	if err != nil {
+		fmt.Errorf("error is %v\n", res)
+		return
+	}
+	console(config.Decrypt(res.Encrypt))
 }

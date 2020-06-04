@@ -1,7 +1,6 @@
 package wx
 
 import (
-	"encoding/xml"
 	"errors"
 	"github.com/songouku/gwx/constant"
 	"github.com/songouku/gwx/model"
@@ -20,12 +19,7 @@ type IMessageHandler interface {
 	ViewHandler() interface{}
 }
 
-func (c *Config) HandlerMessage(content string) error {
-	msg := model.Message{}
-	err := xml.Unmarshal([]byte(content), &msg)
-	if err != nil {
-		return err
-	}
+func (c *Config) HandlerMessage(msg *model.Message) error {
 	c.SetCurrentMsg(msg.MsgType)
 	if msg.MsgType == constant.EventMsg.Type {
 		c.SetCurrentMsg(msg.Event)

@@ -2,7 +2,7 @@ package model
 
 type Message struct {
 	Encrypt      string
-	ToUserName   string
+	ToUserName   string `xml:"ToUserName"`
 	FromUserName string
 	CreateTime   string
 	MsgType      string
