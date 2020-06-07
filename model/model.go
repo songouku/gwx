@@ -24,6 +24,13 @@ type Message struct {
 	Url          string
 }
 
+type AesResponse struct {
+	Encrypt      string
+	MsgSignature string
+	TimeStamp    int64
+	Nonce        string
+}
+
 //<editor-fold desc="消息">
 type TxtMessage struct {
 	ToUserName   string

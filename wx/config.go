@@ -5,10 +5,11 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/xml"
-	"fmt"
+	"errors"
 	"github.com/songouku/gwx/model"
 	"github.com/songouku/gwx/util"
 	"sort"
+	"time"
 )
 
 type Config struct {
@@ -130,7 +131,7 @@ func NewConfig(appId, secret, token, EncodingKey string) *Config {
 	}
 }
 
-func (c *Config) Sign(param []string, signature string) bool {
+func (c *Config) Sign(param []string) string {
 	param = append(param, c.Token)
 	sort.Strings(param)
 	var str string
@@ -139,7 +140,7 @@ func (c *Config) Sign(param []string, signature string) bool {
 	}
 	valid := sha1.Sum([]byte(str))
 	sign := hex.EncodeToString(valid[:])
-	return sign == signature
+	return sign
 }
 
 func (c *Config) Decrypt(content string) (*model.Message, error) {
@@ -159,8 +160,86 @@ func (c *Config) Decrypt(content string) (*model.Message, error) {
 	var result model.Message
 	err = xml.Unmarshal([]byte(s), &result)
 	if err != nil {
-		fmt.Errorf("error is %s\n", err.Error())
 		return nil, err
 	}
 	return &result, err
+}
+
+func (c *Config) Encrypt(content []byte) ([]byte, error) {
+	aesKey, err := base64.StdEncoding.DecodeString(c.EncodingKey + "=")
+	if err != nil {
+		return nil, err
+	}
+	tmp, err := util.AesEncrypt(content, aesKey)
+	if err != nil {
+		return nil, err
+	}
+	res := base64.StdEncoding.EncodeToString(tmp)
+	return []byte(res), nil
+}
+
+type HandlerReq struct {
+	Signature    string
+	Timestamp    string
+	Nonce        string
+	Echostr      string
+	EncryptType  string
+	MsgSignature string
+	MsgBody      string
+}
+
+func (c *Config) Handler(req HandlerReq, msgService IMessageHandler) (interface{}, error) {
+	params := []string{req.Timestamp, req.Nonce}
+	if req.EncryptType == "aes" {
+		//秘文
+		//验签
+		params = append(params, req.EncryptType)
+		if c.Sign(params) == req.MsgSignature {
+			return nil, errors.New("valid sign failed")
+		}
+		var res model.Message
+		err := xml.Unmarshal([]byte(req.MsgBody), &res)
+		if err != nil {
+			return nil, err
+		}
+		msg, err := c.Decrypt(res.Encrypt)
+		if err != nil {
+			return nil, err
+		}
+		err = c.HandlerMessage(msg)
+		if err != nil {
+			return nil, err
+		}
+		xmlData, err := xml.Marshal(c.MessageHandler(msgService))
+		if err != nil {
+			return nil, err
+		}
+		data, err := c.Encrypt(xmlData)
+		if err != nil {
+			return nil, err
+		}
+		now := time.Now().Unix()
+		args := []string{string(now), req.Nonce}
+		signature := c.Sign(args)
+		aesRes := model.AesResponse{
+			Encrypt:      string(data),
+			MsgSignature: signature,
+			TimeStamp:    now,
+			Nonce:        req.Nonce,
+		}
+		return aesRes, nil
+	} else {
+		//明文
+		var msg model.Message
+		err := xml.Unmarshal([]byte(req.MsgBody), &msg)
+		if err != nil {
+			return nil, err
+		}
+		err = c.HandlerMessage(&msg)
+		if err != nil {
+			return nil, err
+		}
+		res := c.MessageHandler(msgService)
+		return res, nil
+	}
 }
