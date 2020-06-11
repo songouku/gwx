@@ -1,5 +1,7 @@
 package model
 
+import "encoding/xml"
+
 type Message struct {
 	Encrypt      string
 	ToUserName   string `xml:"ToUserName"`
@@ -25,10 +27,19 @@ type Message struct {
 }
 
 type AesResponse struct {
-	Encrypt      string
-	MsgSignature string
+	XMLName      xml.Name `xml:"xml"`
+	Encrypt      CDATA
+	MsgSignature CDATA
 	TimeStamp    int64
-	Nonce        string
+	Nonce        CDATA
+}
+
+type CDATA string
+
+func (c CDATA) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+	return e.EncodeElement(struct {
+		string `xml:",cdata"`
+	}{string(c)}, start)
 }
 
 //<editor-fold desc="消息">

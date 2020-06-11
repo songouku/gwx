@@ -9,6 +9,7 @@ import (
 	"github.com/songouku/gwx/model"
 	"github.com/songouku/gwx/util"
 	"sort"
+	"strconv"
 	"time"
 )
 
@@ -131,7 +132,7 @@ func NewConfig(appId, secret, token, EncodingKey string) *Config {
 	}
 }
 
-func (c *Config) Sign(param []string) string {
+func (c *Config) Sign(param ...string) string {
 	param = append(param, c.Token)
 	sort.Strings(param)
 	var str string
@@ -144,10 +145,7 @@ func (c *Config) Sign(param []string) string {
 }
 
 func (c *Config) Decrypt(content string) (*model.Message, error) {
-	aesKey, err := base64.StdEncoding.DecodeString(c.EncodingKey + "=")
-	if err != nil {
-		return nil, err
-	}
+	aesKey := util.GetAesKey(c.EncodingKey)
 	tmp, err := base64.StdEncoding.DecodeString(content)
 	if err != nil {
 		return nil, err
@@ -194,7 +192,7 @@ func (c *Config) Handler(req HandlerReq, msgService IMessageHandler) (interface{
 		//秘文
 		//验签
 		params = append(params, req.EncryptType)
-		if c.Sign(params) == req.MsgSignature {
+		if c.Sign(params...) == req.MsgSignature {
 			return nil, errors.New("valid sign failed")
 		}
 		var res model.Message
@@ -210,22 +208,18 @@ func (c *Config) Handler(req HandlerReq, msgService IMessageHandler) (interface{
 		if err != nil {
 			return nil, err
 		}
-		xmlData, err := xml.Marshal(c.MessageHandler(msgService))
+		nonce := util.GetRandom(16)
+		xmlData, err := util.EncryptData(c.MessageHandler(msgService), c.AppId, nonce, util.GetAesKey(c.EncodingKey))
 		if err != nil {
 			return nil, err
 		}
-		data, err := c.Encrypt(xmlData)
-		if err != nil {
-			return nil, err
-		}
+		result := base64.StdEncoding.EncodeToString(xmlData)
 		now := time.Now().Unix()
-		args := []string{string(now), req.Nonce}
-		signature := c.Sign(args)
 		aesRes := model.AesResponse{
-			Encrypt:      string(data),
-			MsgSignature: signature,
+			Encrypt:      model.CDATA(result),
+			MsgSignature: model.CDATA(c.Sign(strconv.FormatInt(now, 10), nonce, result)),
 			TimeStamp:    now,
-			Nonce:        req.Nonce,
+			Nonce:        model.CDATA(nonce),
 		}
 		return aesRes, nil
 	} else {

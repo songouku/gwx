@@ -4,52 +4,82 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/rand"
+	"errors"
+	"io"
 )
 
-//@brief: 填充明文
-func PKCS5Padding(plaintext []byte, blockSize int) []byte {
-	padding := blockSize - len(plaintext)%blockSize
-	padText := bytes.Repeat([]byte{byte(padding)}, padding)
-	return append(plaintext, padText...)
+// PadLength calculates padding length, from github.com/vgorin/cryptogo
+func PadLength(slice_length, blocksize int) (padlen int) {
+	padlen = blocksize - slice_length%blocksize
+	if padlen == 0 {
+		padlen = blocksize
+	}
+	return padlen
 }
 
-//@brief: 去除填充数据
-func PKCS5UnPadding(origData []byte) []byte {
-	length := len(origData)
-	unPadding := int(origData[length-1])
-	return origData[:(length - unPadding)]
+//from github.com/vgorin/cryptogo
+func PKCS7Pad(message []byte, blocksize int) (padded []byte) {
+	// block size must be bigger or equal 2
+	if blocksize < 1<<1 {
+		panic("block size is too small (minimum is 2 bytes)")
+	}
+	// block size up to 255 requires 1 byte padding
+	if blocksize < 1<<8 {
+		// calculate padding length
+		padlen := PadLength(len(message), blocksize)
+
+		// define PKCS7 padding block
+		padding := bytes.Repeat([]byte{byte(padlen)}, padlen)
+
+		// apply padding
+		padded = append(message, padding...)
+		return padded
+	}
+	// block size bigger or equal 256 is not currently supported
+	panic("unsupported block size")
 }
 
-//@brief: AES加密
-func AesEncrypt(origData, key []byte) ([]byte, error) {
-	block, err := aes.NewCipher(key)
+func AesEncrypt(plainData []byte, aesKey []byte) ([]byte, error) {
+	k := len(aesKey)
+	if len(plainData)%k != 0 {
+		plainData = PKCS7Pad(plainData, k)
+	}
+
+	block, err := aes.NewCipher(aesKey)
 	if err != nil {
 		return nil, err
 	}
 
-	//AES分组长度为 128 位，所以 blockSize=16 字节
-	blockSize := block.BlockSize()
-	origData = PKCS5Padding(origData, blockSize)
-	//初始向量的长度必须等于块block的长度16字节
-	blockMode := cipher.NewCBCEncrypter(block, key[:blockSize])
-	crapped := make([]byte, len(origData))
-	blockMode.CryptBlocks(crapped, origData)
-	return crapped, nil
+	iv := make([]byte, aes.BlockSize)
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		return nil, err
+	}
+
+	cipherData := make([]byte, len(plainData))
+	blockMode := cipher.NewCBCEncrypter(block, iv)
+	blockMode.CryptBlocks(cipherData, plainData)
+
+	return cipherData, nil
 }
 
-//@brief:AES解密
-func AesDecrypt(crypted, key []byte) ([]byte, error) {
-	block, err := aes.NewCipher(key)
+func AesDecrypt(cipherData []byte, aesKey []byte) ([]byte, error) {
+	k := len(aesKey) //PKCS#7
+	if len(cipherData)%k != 0 {
+		return nil, errors.New("crypto/cipher: ciphertext size is not multiple of aes key length")
+	}
+
+	block, err := aes.NewCipher(aesKey)
 	if err != nil {
 		return nil, err
 	}
 
-	// AES分组长度为 128 位，所以 blockSize=16 字节
-	blockSize := block.BlockSize()
-	//初始向量的长度必须等于块block的长度16字节
-	blockMode := cipher.NewCBCDecrypter(block, key[:blockSize])
-	origData := make([]byte, len(crypted))
-	blockMode.CryptBlocks(origData, crypted)
-	origData = PKCS5UnPadding(origData)
-	return origData, nil
+	iv := make([]byte, aes.BlockSize)
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		return nil, err
+	}
+	blockMode := cipher.NewCBCDecrypter(block, iv)
+	plainData := make([]byte, len(cipherData))
+	blockMode.CryptBlocks(plainData, cipherData)
+	return plainData, nil
 }

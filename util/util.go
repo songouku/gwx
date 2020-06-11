@@ -2,10 +2,14 @@ package util
 
 import (
 	"bytes"
+	"encoding/base64"
+	"encoding/binary"
 	"encoding/json"
+	"encoding/xml"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math/rand"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -114,4 +118,38 @@ func PostForm(requestUrl, fileName, token, mediaType string) ([]byte, error) {
 	}
 	defer res.Body.Close()
 	return ioutil.ReadAll(res.Body)
+}
+
+func GetRandom(length int) string {
+	str := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+	b := make([]rune, length)
+	for i := range b {
+		b[i] = str[rand.Intn(len(str))]
+	}
+	return string(b)
+}
+
+func GetAesKey(encodingKey string) []byte {
+	aesKey, err := base64.StdEncoding.DecodeString(encodingKey + "=")
+	if err != nil {
+		return nil
+	}
+	return aesKey
+}
+
+func EncryptData(data interface{}, appId, nonce string, aesKey []byte) ([]byte, error) {
+	xmlData, err := xml.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	buf := new(bytes.Buffer)
+	err = binary.Write(buf, binary.BigEndian, int32(len(xmlData)))
+	if err != nil {
+		return nil, err
+	}
+	bodyLength := buf.Bytes()
+	randomBytes := []byte(nonce)
+
+	plainData := bytes.Join([][]byte{randomBytes, bodyLength, xmlData, []byte(appId)}, nil)
+	return AesEncrypt(plainData, aesKey)
 }

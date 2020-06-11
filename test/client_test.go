@@ -6,7 +6,9 @@ import (
 	"github.com/songouku/gwx/constant"
 	"github.com/songouku/gwx/model"
 	"github.com/songouku/gwx/wx"
+	"math/rand"
 	"testing"
+	"time"
 )
 
 var (
@@ -129,4 +131,18 @@ func TestAes(t *testing.T) {
 		return
 	}
 	console(config.Decrypt(res.Encrypt))
+}
+
+func TestTime(t *testing.T) {
+	now := time.Now().Unix()
+	fmt.Printf("now is %v\n", now)
+}
+
+func TestRandom(t *testing.T) {
+	str := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789")
+	b := make([]rune, 16)
+	for i := range b {
+		b[i] = str[rand.Intn(len(str))]
+	}
+	fmt.Printf("str is %s\n", string(b))
 }
