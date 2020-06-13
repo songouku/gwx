@@ -1,7 +1,10 @@
 package model
 
+import "encoding/xml"
+
 //<editor-fold desc="消息回复体">
 type TextMessageResponse struct {
+	XMLName      xml.Name `xml:"xml"`
 	ToUserName   string
 	FromUserName string
 	CreateTime   string `content:"消息创建时间 （整型）"`
@@ -10,6 +13,7 @@ type TextMessageResponse struct {
 }
 
 type ImageMessageResponse struct {
+	XMLName      xml.Name `xml:"xml"`
 	ToUserName   string
 	FromUserName string
 	CreateTime   string `content:"消息创建时间 （整型）"`
@@ -18,6 +22,7 @@ type ImageMessageResponse struct {
 }
 
 type VoiceMessageResponse struct {
+	XMLName      xml.Name `xml:"xml"`
 	ToUserName   string
 	FromUserName string
 	CreateTime   string `content:"消息创建时间 （整型）"`
@@ -26,6 +31,7 @@ type VoiceMessageResponse struct {
 }
 
 type VideoMessageResponse struct {
+	XMLName      xml.Name `xml:"xml"`
 	ToUserName   string
 	FromUserName string
 	CreateTime   string `content:"消息创建时间 （整型）"`
@@ -36,6 +42,7 @@ type VideoMessageResponse struct {
 }
 
 type MusicMessageResponse struct {
+	XMLName      xml.Name `xml:"xml"`
 	ToUserName   string
 	FromUserName string
 	CreateTime   string `content:"消息创建时间 （整型）"`
@@ -48,6 +55,7 @@ type MusicMessageResponse struct {
 }
 
 type NewsMessageResponse struct {
+	XMLName      xml.Name `xml:"xml"`
 	ToUserName   string
 	FromUserName string
 	CreateTime   string `content:"消息创建时间 （整型）"`

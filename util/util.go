@@ -149,7 +149,6 @@ func EncryptData(data interface{}, appId, nonce string, aesKey []byte) ([]byte, 
 	}
 	bodyLength := buf.Bytes()
 	randomBytes := []byte(nonce)
-
 	plainData := bytes.Join([][]byte{randomBytes, bodyLength, xmlData, []byte(appId)}, nil)
 	return AesEncrypt(plainData, aesKey)
 }
