@@ -2,8 +2,6 @@ package wx
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
 	"github.com/songouku/gwx/constant"
 	"github.com/songouku/gwx/model"
 	"github.com/songouku/gwx/util"
@@ -17,13 +15,12 @@ func (c *Config) GetToken() (*model.Token, error) {
 	}
 	res, err := util.Get(constant.Token, params)
 	if err != nil {
-		return nil, errors.New("")
+		return nil, err
 	}
 	var token model.Token
 	err = json.Unmarshal(res, &token)
 	if err != nil {
-		fmt.Errorf("decode failed , error is %v", err)
-		return nil, errors.New(err.Error())
+		return nil, err
 	}
 	return &token, nil
 }
