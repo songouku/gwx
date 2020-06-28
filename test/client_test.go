@@ -19,7 +19,7 @@ var (
 )
 
 var config *wx.Config
-var token = "33_d3PylGkPFkYrMsEcbLiJq9YLJjS2Hp4ETbYh4KR9EJU8Xw9i8oD5Py3z6VKMLWVnfwzZ1PaZZtNXet1oBzHElrf6tC1tSf5NJ8CTzLMJMLJ91bFzExfFhoCdnuiKr4QU1SNvuOQRSxjUIHOpHYLeAIABSF"
+var token = "34_fud3hSStBRGSexwR-DS69qU9I7RwqffdW68gX8A18IpeFUZf6Mtrk9oP1SI7Un2Ow0Z4EPP7MirHtHmmvtD42BzMEbozPrAOZ6WnM-J7O-lGtKKNDLCzfWHv0K-uegQmDwgZidxzaMhIj4xmFILfABAILO"
 
 func init() {
 	config = wx.NewConfig(AppId, Secret, Token, EncodingKey)
@@ -145,4 +145,10 @@ func TestRandom(t *testing.T) {
 		b[i] = str[rand.Intn(len(str))]
 	}
 	fmt.Printf("str is %s\n", string(b))
+}
+
+func TestUserInfo(t *testing.T) {
+	openId := "o9h_PvhcxthiebXImiHCyJkVp-Eg"
+	res, err := wx.UserInfo(token, openId)
+	console(res, err)
 }

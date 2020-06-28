@@ -59,4 +59,7 @@ var (
 
 	//删除素材
 	DelMaterial = "https://api.weixin.qq.com/cgi-bin/material/del_material?access_token=%s"
+
+	//个人信息
+	UserInfo = "https://api.weixin.qq.com/cgi-bin/user/info"
 )
