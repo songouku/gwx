@@ -62,4 +62,7 @@ var (
 
 	//个人信息
 	UserInfo = "https://api.weixin.qq.com/cgi-bin/user/info"
+
+	//批量获取用户信息
+	BatchUserInfo = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=%s"
 )

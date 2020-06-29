@@ -19,7 +19,7 @@ var (
 )
 
 var config *wx.Config
-var token = "34_fud3hSStBRGSexwR-DS69qU9I7RwqffdW68gX8A18IpeFUZf6Mtrk9oP1SI7Un2Ow0Z4EPP7MirHtHmmvtD42BzMEbozPrAOZ6WnM-J7O-lGtKKNDLCzfWHv0K-uegQmDwgZidxzaMhIj4xmFILfABAILO"
+var token = "34_QaUy_WqBnQjjLP3CqRsiGtPP8cBTFSiKOIcfEs6AeUk5MlodmPFXWNujF48tBvy6uOdJRjrfRMd7f6ctcP3jJd9hzhioc3Pid9GRYnOCO73tbj6uurjqChcBJDyJY6O7082haXzKgiB9BAkYJOZaAGADIT"
 
 func init() {
 	config = wx.NewConfig(AppId, Secret, Token, EncodingKey)
@@ -102,6 +102,7 @@ func TestDelMaterial(t *testing.T) {
 	mediaId := "0GPeqeABYec913q2Ho6p6S27QW8Bgb4DDXhx3cmoeeE"
 	console(wx.DelMaterial(token, mediaId))
 }
+
 func TestCreateMenu(t *testing.T) {
 	button := wx.Button{
 		Type: constant.Click.Key,
@@ -150,5 +151,11 @@ func TestRandom(t *testing.T) {
 func TestUserInfo(t *testing.T) {
 	openId := "o9h_PvhcxthiebXImiHCyJkVp-Eg"
 	res, err := wx.UserInfo(token, openId)
+	console(res, err)
+}
+
+func TestBatchUserInfo(t *testing.T) {
+	openId := "o9h_PvhcxthiebXImiHCyJkVp-Eg"
+	res, err := wx.BatchUserInfo(token, openId)
 	console(res, err)
 }
