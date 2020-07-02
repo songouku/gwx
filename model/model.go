@@ -153,21 +153,3 @@ type Response struct {
 	ErrCode int    `json:"errcode"`
 	ErrMsg  string `json:"errmsg"`
 }
-
-type Token struct {
-	AccessToken string `json:"access_token,omitempty"`
-	ExpiresIn   int    `json:"expires_in,omitempty"`
-	ErrCode     int    `json:"errcode,omitempty"`
-	ErrMsg      string `json:"errmsg,omitempty"`
-}
-
-//永久素材
-
-//临时素材
-type WxImage struct {
-	Type      string `json:"type"`
-	MediaId   string `json:"media_id"`
-	CreatedAt int    `json:"created_at"`
-	ErrCode   int    `json:"errcode"`
-	ErrMsg    string `json:"errmsg"`
-}

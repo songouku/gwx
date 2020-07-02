@@ -3,11 +3,17 @@ package wx
 import (
 	"encoding/json"
 	"github.com/songouku/gwx/constant"
-	"github.com/songouku/gwx/model"
 	"github.com/songouku/gwx/util"
 )
 
-func (c *Config) GetToken() (*model.Token, error) {
+type Token struct {
+	AccessToken string `json:"access_token,omitempty"`
+	ExpiresIn   int    `json:"expires_in,omitempty"`
+	ErrCode     int    `json:"errcode,omitempty"`
+	ErrMsg      string `json:"errmsg,omitempty"`
+}
+
+func (c *Config) GetToken() (*Token, error) {
 	params := map[string]interface{}{
 		"grant_type": "client_credential",
 		"appid":      c.AppId,
@@ -17,7 +23,7 @@ func (c *Config) GetToken() (*model.Token, error) {
 	if err != nil {
 		return nil, err
 	}
-	var token model.Token
+	var token Token
 	err = json.Unmarshal(res, &token)
 	if err != nil {
 		return nil, err

@@ -19,13 +19,21 @@ type MediaResponse struct {
 	ErrMsg       string `json:"errmsg"`
 }
 
+type ImageMedia struct {
+	Type      string `json:"type"`
+	MediaId   string `json:"media_id"`
+	CreatedAt int    `json:"created_at"`
+	ErrCode   int    `json:"errcode"`
+	ErrMsg    string `json:"errmsg"`
+}
+
 //上传临时素材
-func UploadTmpMedia(token, fileName string) (*model.WxImage, error) {
+func UploadTmpMedia(token, fileName string) (*ImageMedia, error) {
 	body, err := util.Upload(constant.CreateMedia, fileName, token, constant.Image.Type)
 	if err != nil {
 		return nil, err
 	}
-	var result model.WxImage
+	var result ImageMedia
 	err = json.Unmarshal(body, &result)
 	if err != nil {
 		return nil, err
