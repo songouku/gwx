@@ -18,7 +18,9 @@ type ImageMessageResponse struct {
 	FromUserName string
 	CreateTime   string `content:"消息创建时间 （整型）"`
 	MsgType      string
-	MediaId      string
+	Image        struct {
+		MediaId string
+	}
 }
 
 type VoiceMessageResponse struct {
@@ -27,7 +29,9 @@ type VoiceMessageResponse struct {
 	FromUserName string
 	CreateTime   string `content:"消息创建时间 （整型）"`
 	MsgType      string
-	MediaId      string
+	Voice        struct {
+		MediaId string
+	}
 }
 
 type VideoMessageResponse struct {

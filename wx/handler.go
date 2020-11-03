@@ -89,7 +89,7 @@ func (c *Config) HandlerMessage(msg *model.Message) error {
 			CreateTime:   msg.CreateTime,
 			MsgType:      msg.MsgType,
 			PicUrl:       msg.PicUrl,
-			MediaId:      msg.MediaId,
+			Image:        struct{ MediaId string }{MediaId: msg.MediaId},
 			MsgId:        msg.MsgId,
 		})
 		return nil
@@ -100,7 +100,7 @@ func (c *Config) HandlerMessage(msg *model.Message) error {
 			FromUserName: msg.ToUserName,
 			CreateTime:   msg.CreateTime,
 			MsgType:      msg.MsgType,
-			MediaId:      msg.MediaId,
+			Voice:        struct{ MediaId string }{MediaId: msg.MediaId},
 			MsgId:        msg.MsgId,
 			Format:       msg.Format,
 		})
@@ -112,9 +112,17 @@ func (c *Config) HandlerMessage(msg *model.Message) error {
 			FromUserName: msg.FromUserName,
 			CreateTime:   msg.CreateTime,
 			MsgType:      msg.MsgType,
-			MediaId:      msg.MediaId,
 			ThumbMediaId: msg.ThumbMediaId,
 			MsgId:        msg.MsgId,
+			Video: struct {
+				MediaId     string
+				Title       string
+				Description string
+			}{
+				MediaId:     msg.MediaId,
+				Title:       msg.Title,
+				Description: msg.Description,
+			},
 		})
 		return nil
 	} else if msg.MsgType == constant.ShortVideoMsg.Type {

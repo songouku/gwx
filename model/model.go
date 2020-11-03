@@ -58,8 +58,10 @@ type ImageMessage struct {
 	CreateTime   string
 	MsgType      string
 	PicUrl       string
-	MediaId      string
 	MsgId        string
+	Image        struct {
+		MediaId string
+	}
 }
 
 type VoiceMessage struct {
@@ -67,9 +69,11 @@ type VoiceMessage struct {
 	FromUserName string
 	CreateTime   string
 	MsgType      string
-	MediaId      string
-	MsgId        string
-	Format       string
+	Voice        struct {
+		MediaId string
+	}
+	MsgId  string
+	Format string
 }
 
 type VideoMessage struct {
@@ -80,6 +84,11 @@ type VideoMessage struct {
 	MediaId      string
 	ThumbMediaId string
 	MsgId        string
+	Video        struct {
+		MediaId     string
+		Title       string
+		Description string
+	}
 }
 
 type LocationMessage struct {
