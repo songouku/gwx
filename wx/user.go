@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/songouku/gwx/constant"
-	"github.com/songouku/gwx/util"
+	util "github.com/songouku/gwx/util"
 )
 
 type UserInfoResponse struct {
@@ -87,6 +87,54 @@ func BatchUserInfo(token string, openId ...string) (*BatchUserInfoResponse, erro
 		return nil, err
 	}
 	var result BatchUserInfoResponse
+	err = json.Unmarshal(res, &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+type UserTokenResponse struct {
+	ErrCode      int    `json:"errcode"`
+	ErrMsg       string `json:"errmsg"`
+	AccessToken  string `json:"access_token"`
+	ExpiresIn    int64  `json:"expires_in"`
+	RefreshToken string `json:"refresh_token"`
+	OpenId       string `json:"openid"`
+	Scope        string `json:"scope"`
+}
+
+//用户授权，获取token
+func GetUserToken(appId, secret, code string) (*UserTokenResponse, error) {
+	params := make(map[string]interface{})
+	params["appid"] = appId
+	params["secret"] = secret
+	params["code"] = code
+	params["grant_type"] = "authorization_code"
+	res, err := util.Get(constant.GetUserToken, params)
+	if err != nil {
+		return nil, err
+	}
+	var result UserTokenResponse
+	err = json.Unmarshal(res, &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+//用户授权后获取用户信息
+//此token为用户授权后获取的token
+func GetUserInfo(token, openId string) (*Info, error) {
+	params := make(map[string]interface{})
+	params["access_token"] = token
+	params["openid"] = openId
+	params["lang"] = "zh_CN"
+	res, err := util.Get(constant.GetUserInfo, params)
+	if err != nil {
+		return nil, err
+	}
+	var result Info
 	err = json.Unmarshal(res, &result)
 	if err != nil {
 		return nil, err

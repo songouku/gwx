@@ -65,4 +65,10 @@ var (
 
 	//批量获取用户信息
 	BatchUserInfo = "https://api.weixin.qq.com/cgi-bin/user/info/batchget?access_token=%s"
+
+	//用户授权，获取token
+	GetUserToken = "https://api.weixin.qq.com/sns/oauth2/access_token"
+
+	//用户授权后，获取用户信息
+	GetUserInfo = "https://api.weixin.qq.com/sns/userinfo"
 )
