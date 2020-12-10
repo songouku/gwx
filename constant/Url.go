@@ -71,4 +71,6 @@ var (
 
 	//用户授权后，获取用户信息
 	GetUserInfo = "https://api.weixin.qq.com/sns/userinfo"
+
+	OAuth = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect"
 )

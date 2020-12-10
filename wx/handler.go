@@ -19,7 +19,7 @@ type IMessageHandler interface {
 	ViewHandler() interface{}
 }
 
-func (c *Config) HandlerMessage(msg *model.Message) error {
+func (c *Config) PreHandlerMessage(msg *model.Message) error {
 	c.SetCurrentMsg(msg.MsgType)
 	if msg.MsgType == constant.EventMsg.Type {
 		c.SetCurrentMsg(msg.Event)
@@ -158,7 +158,7 @@ func (c *Config) HandlerMessage(msg *model.Message) error {
 	return errors.New("unknown message type")
 }
 
-func (c *Config) MessageHandler(messageHandler IMessageHandler) interface{} {
+func (c *Config) HandlerMsg(messageHandler IMessageHandler) interface{} {
 	if c.GetCurrentMsg() == constant.ClickEvent.Type {
 		return messageHandler.ClickHandler()
 	} else if c.GetCurrentMsg() == constant.ViewEvent.Type {

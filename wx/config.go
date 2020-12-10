@@ -6,6 +6,8 @@ import (
 	"encoding/hex"
 	"encoding/xml"
 	"errors"
+	"fmt"
+	"github.com/songouku/gwx/constant"
 	"github.com/songouku/gwx/model"
 	"github.com/songouku/gwx/util"
 	"sort"
@@ -17,6 +19,8 @@ type Config struct {
 	AppId       string `json:"appId"`
 	Secret      string `json:"secret"`
 	Token       string `json:"token"`
+	OAuth       string //授权后跳转链接
+	Scope       string //授权类型
 	EncodingKey string
 
 	txtMessage      model.TxtMessage
@@ -123,12 +127,23 @@ func (c *Config) GetCurrentMsg() string {
 	return c.currentMsgType
 }
 
-func NewConfig(appId, secret, token, EncodingKey string) *Config {
+func (c *Config) SetOAuth(oauth string) {
+	c.OAuth = oauth
+}
+
+//获取授权链接
+func (c *Config) GetOAuthUrl() string {
+	return fmt.Sprintf(constant.OAuth, c.AppId, c.OAuth, c.Scope)
+}
+
+func NewConfig(appId, secret, token, EncodingKey, scope, oauth string) *Config {
 	return &Config{
 		AppId:       appId,
 		Secret:      secret,
 		Token:       token,
 		EncodingKey: EncodingKey,
+		OAuth:       oauth,
+		Scope:       scope,
 	}
 }
 
@@ -204,12 +219,12 @@ func (c *Config) Handler(req HandlerReq, msgService IMessageHandler) (interface{
 		if err != nil {
 			return nil, err
 		}
-		err = c.HandlerMessage(msg)
+		err = c.PreHandlerMessage(msg)
 		if err != nil {
 			return nil, err
 		}
 		nonce := util.GetRandom(16)
-		xmlData, err := util.EncryptData(c.MessageHandler(msgService), c.AppId, nonce, util.GetAesKey(c.EncodingKey))
+		xmlData, err := util.EncryptData(c.HandlerMsg(msgService), c.AppId, nonce, util.GetAesKey(c.EncodingKey))
 		if err != nil {
 			return nil, err
 		}
@@ -229,11 +244,11 @@ func (c *Config) Handler(req HandlerReq, msgService IMessageHandler) (interface{
 		if err != nil {
 			return nil, err
 		}
-		err = c.HandlerMessage(&msg)
+		err = c.PreHandlerMessage(&msg)
 		if err != nil {
 			return nil, err
 		}
-		res := c.MessageHandler(msgService)
+		res := c.HandlerMsg(msgService)
 		return res, nil
 	}
 }

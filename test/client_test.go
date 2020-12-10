@@ -19,7 +19,7 @@ var (
 )
 
 var config *wx.Config
-var token = "34_QaUy_WqBnQjjLP3CqRsiGtPP8cBTFSiKOIcfEs6AeUk5MlodmPFXWNujF48tBvy6uOdJRjrfRMd7f6ctcP3jJd9hzhioc3Pid9GRYnOCO73tbj6uurjqChcBJDyJY6O7082haXzKgiB9BAkYJOZaAGADIT"
+var token = "38_rXl9UqrL7rSLQQCL7qO6CgJpjCnEQumvfJO9VYOA-7UGMxwr2lZ4qR4CEuv_J8xvRP5r5xiMLG2-VU5eVI9hRoSU2EnJdB0DyovdqaLgax2IkJZsAm-FiUzP_QpDi_rP4UssfVc4pOX6HUY6CFFaADALOO"
 
 func init() {
 	config = wx.NewConfig(AppId, Secret, Token, EncodingKey)
@@ -106,8 +106,8 @@ func TestDelMaterial(t *testing.T) {
 func TestCreateMenu(t *testing.T) {
 	button := wx.Button{
 		Type: constant.Click.Key,
-		Name: "百度",
-		Key:  "baidu",
+		Name: "授权",
+		Key:  "oauth",
 	}
 	args := wx.CreateMenuArgs{
 		Button: []wx.Button{button},

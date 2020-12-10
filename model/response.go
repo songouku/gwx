@@ -72,6 +72,16 @@ type NewsMessageResponse struct {
 	Url          string
 }
 
+type ViewMessageResponse struct {
+	XMLName      xml.Name `xml:"xml"`
+	ToUserName   string
+	FromUserName string
+	CreateTime   string `content:"消息创建时间 （整型）"`
+	MsgType      string
+	Event        string
+	EventKey     string
+}
+
 //</editor-fold>
 
 type TokenResponse struct {
