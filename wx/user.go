@@ -71,7 +71,7 @@ type BatchUserInfoResponse struct {
 	UserInfoList []Info `json:"user_info_list"`
 }
 
-//批量获取用户信息
+// BatchUserInfo 批量获取用户信息
 func BatchUserInfo(token string, openId ...string) (*BatchUserInfoResponse, error) {
 	param := make(map[string]interface{})
 	var list []map[string]interface{}
@@ -104,7 +104,7 @@ type UserTokenResponse struct {
 	Scope        string `json:"scope"`
 }
 
-//用户授权，获取token
+// GetUserToken 用户授权，获取token
 func GetUserToken(appId, secret, code string) (*UserTokenResponse, error) {
 	params := make(map[string]interface{})
 	params["appid"] = appId
@@ -123,14 +123,14 @@ func GetUserToken(appId, secret, code string) (*UserTokenResponse, error) {
 	return &result, nil
 }
 
-//用户授权后获取用户信息
+// GetUserInfo 用户授权后获取用户信息
 //此token为用户授权后获取的token
 func GetUserInfo(token, openId string) (*Info, error) {
 	params := make(map[string]interface{})
 	params["access_token"] = token
 	params["openid"] = openId
 	params["lang"] = "zh_CN"
-	res, err := util.Get(constant.GetUserInfo, params)
+	res, err := util.Get(constant.UserInfo, params)
 	if err != nil {
 		return nil, err
 	}
