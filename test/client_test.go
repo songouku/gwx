@@ -21,10 +21,6 @@ var (
 var config *wx.Config
 var token = "38_rXl9UqrL7rSLQQCL7qO6CgJpjCnEQumvfJO9VYOA-7UGMxwr2lZ4qR4CEuv_J8xvRP5r5xiMLG2-VU5eVI9hRoSU2EnJdB0DyovdqaLgax2IkJZsAm-FiUzP_QpDi_rP4UssfVc4pOX6HUY6CFFaADALOO"
 
-func init() {
-	config = wx.NewConfig(AppId, Secret, Token, EncodingKey)
-}
-
 func console(data interface{}, err error) {
 	if err != nil {
 		fmt.Errorf("error is %v\n", err)

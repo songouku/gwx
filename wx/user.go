@@ -130,7 +130,7 @@ func GetUserInfo(token, openId string) (*Info, error) {
 	params["access_token"] = token
 	params["openid"] = openId
 	params["lang"] = "zh_CN"
-	res, err := util.Get(constant.UserInfo, params)
+	res, err := util.Get(constant.GetUserInfo, params)
 	if err != nil {
 		return nil, err
 	}
